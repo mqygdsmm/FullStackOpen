@@ -2,9 +2,7 @@ import { useState } from 'react'
 
 const Display = ({content}) => <h1>{content}</h1>
 const Button = ({onClick, text}) => <button onClick={onClick}>{text}</button>
-const StatisticsLine = ({content, number}) => <p>{content} {number}</p>
-const Average = ({good, neutral, bad}) => <p>average {(good - bad) / (good + neutral + bad)} </p>
-const Percentage = ({good, neutral, bad}) => <p>positive {good / (good + neutral + bad) * 100}%</p>
+const StatisticsLine = ({content, number}) => <tr><td>{content}</td> <td>{Math.round(number * 10) / 10}</td></tr>
 const Statistics = ({good, neutral, bad}) => {
   if ((good + neutral + bad) !== 0) {
     return (
@@ -12,8 +10,8 @@ const Statistics = ({good, neutral, bad}) => {
         <StatisticsLine content="good" number={good} /> 
         <StatisticsLine content="neutral" number={neutral} /> 
         <StatisticsLine content="bad" number={bad} /> 
-        <Average good={good} neutral={neutral} bad={bad} />
-        <Percentage good={good} neutral={neutral} bad={bad} />
+        <StatisticsLine content="average" number={(good - bad) / (good + bad + neutral)} /> 
+        <tr><td>positive</td><td>{Math.round(good / (good + bad + neutral) * 1000) / 10}%</td> </tr>
       </div>
     )
   }
