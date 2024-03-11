@@ -6,15 +6,22 @@ const DisplayNumber = ({content, number}) => <p>{content} {number}</p>
 const Average = ({good, neutral, bad}) => <p>average {(good - bad) / (good + neutral + bad)} </p>
 const Percentage = ({good, neutral, bad}) => <p>positive {good / (good + neutral + bad) * 100}%</p>
 const Statistics = ({good, neutral, bad}) => {
-  return (
-    <div>
-      <DisplayNumber content="good" number={good} /> 
-      <DisplayNumber content="neutral" number={neutral} /> 
-      <DisplayNumber content="bad" number={bad} /> 
-      <Average good={good} neutral={neutral} bad={bad} />
-      <Percentage good={good} neutral={neutral} bad={bad} />
-    </div>
-  )
+  if ((good + neutral + bad) !== 0) {
+    return (
+      <div>
+        <DisplayNumber content="good" number={good} /> 
+        <DisplayNumber content="neutral" number={neutral} /> 
+        <DisplayNumber content="bad" number={bad} /> 
+        <Average good={good} neutral={neutral} bad={bad} />
+        <Percentage good={good} neutral={neutral} bad={bad} />
+      </div>
+    )
+  }
+  else {
+    return (
+      <p>No feedback given</p>
+    )
+  }
 }
 const App = () => {
   // save clicks of each button to its own state
