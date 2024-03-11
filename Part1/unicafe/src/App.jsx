@@ -3,6 +3,8 @@ import { useState } from 'react'
 const Display = ({content}) => <h1>{content}</h1>
 const Button = ({onClick, text}) => <button onClick={onClick}>{text}</button>
 const DisplayNumber = ({content, number}) => <p>{content} {number}</p>
+const Average = ({good, neutral, bad}) => <p>average {(good - bad) / (good + neutral + bad)} </p>
+const Percentage = ({good, neutral, bad}) => <p>positive {good / (good + neutral + bad) * 100}%</p>
 
 const App = () => {
   // save clicks of each button to its own state
@@ -19,6 +21,8 @@ const App = () => {
       <DisplayNumber content="good" number={good} /> 
       <DisplayNumber content="neutral" number={neutral} /> 
       <DisplayNumber content="bad" number={bad} /> 
+      <Average good={good} neutral={neutral} bad={bad} />
+      <Percentage good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
