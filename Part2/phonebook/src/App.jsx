@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import NewForm from './components/NewForm'
 import Show from './components/Show'
+import InputBar from './components/InputBar'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -40,7 +41,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      filter show with <input value={filterValue} onChange={handleFilterValueChange}/>
+      <InputBar label='filter show with' trackValue={filterValue} onChange={handleFilterValueChange} />
       <h2>add a new</h2>
       <NewForm newName={newName} newNumber={newNumber} onNameChange={handleNewName} onNumberChange={handleNewNumber} onClick={addPeople}/>
       <h2>Numbers</h2>
