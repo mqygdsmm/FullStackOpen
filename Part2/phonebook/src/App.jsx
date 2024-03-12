@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import NewForm from './components/NewForm'
 import Show from './components/Show'
 import InputBar from './components/InputBar'
-import axios from 'axios'
+import phonebookServices from './services/phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -10,10 +10,9 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filterValue, setFilterValue] = useState('')
   useEffect(() => {
-    axios
-    .get('http://localhost:3001/persons')
-    .then(response => {
-      setPersons(response.data)
+    phonebookServices.getAll()
+    .then(data => {
+      setPersons(data)
     })
   },[])
   const handleNewName = (event) => {
@@ -33,7 +32,10 @@ const App = () => {
         number: newNumber,
         id: persons.length + 1,
       }
-      setPersons(persons.concat(newPerson))
+      phonebookServices.create(newPerson)
+      .then(data => {
+        setPersons(persons.concat(data))
+      })
     }
     setNewName('')
     setNewNumber('')
