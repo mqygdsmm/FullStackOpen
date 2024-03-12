@@ -3,12 +3,14 @@ import NewForm from './components/NewForm'
 import Show from './components/Show'
 import InputBar from './components/InputBar'
 import phonebookServices from './services/phonebook'
+import Message from './components/Message'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterValue, setFilterValue] = useState('')
+  const [message, setMessage] = useState(null)
   useEffect(() => {
     phonebookServices.getAll()
     .then(data => {
@@ -27,7 +29,6 @@ const App = () => {
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         const toUpdatePerson = persons.find(person => person.name === newName)
         const updatedPerson   = {...toUpdatePerson, number: newNumber}
-        console.log(updatedPerson)
         phonebookServices.update(toUpdatePerson.id, updatedPerson)
         .then(data => {
           console.log(data)
@@ -43,6 +44,10 @@ const App = () => {
       phonebookServices.create(newPerson)
       .then(data => {
         setPersons(persons.concat(data))
+        setMessage(`Added ${data.name}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000);
       })
     }
     setNewName('')
@@ -63,6 +68,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message message={message} />
       <InputBar label='filter show with' trackValue={filterValue} onChange={handleFilterValueChange} />
       <h2>add a new</h2>
       <NewForm newName={newName} newNumber={newNumber} onNameChange={handleNewName} onNumberChange={handleNewNumber} onClick={addPeople}/>
