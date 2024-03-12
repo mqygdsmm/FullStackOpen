@@ -30,7 +30,6 @@ const App = () => {
       const newPerson = {
         name: newName,
         number: newNumber,
-        id: persons.length + 1,
       }
       phonebookServices.create(newPerson)
       .then(data => {
@@ -43,6 +42,15 @@ const App = () => {
   const handleFilterValueChange = (event) => {
     setFilterValue(event.target.value)
   }
+
+  const handleDelete = (id) => {
+    if (window.confirm(`Delete ${persons.find(person => person.id === id).name}?`)) {
+      phonebookServices.deletePerson(id)
+      .then(data => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+    }
+  }
   return (
     <div>
       <h2>Phonebook</h2>
@@ -50,7 +58,7 @@ const App = () => {
       <h2>add a new</h2>
       <NewForm newName={newName} newNumber={newNumber} onNameChange={handleNewName} onNumberChange={handleNewNumber} onClick={addPeople}/>
       <h2>Numbers</h2>
-       <Show filterValue={filterValue} persons={persons} />
+       <Show filterValue={filterValue} persons={persons} onClick={handleDelete}/>
     </div>
   )
 }
