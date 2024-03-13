@@ -8,6 +8,15 @@ const App = () => {
   const [message, setMessage] = useState(null)
 
 
+  const getCountryInfo = (country) => {
+    countriesinfoServices.getInfo(country)
+    .then(info => {
+      countriesinfoServices.getWeather(info.capital[0])
+      .then(weatherData => {
+        setMessage({directive:'info' ,data:{info, weatherData}})
+      })
+    })
+  }
 
   useEffect(() => {
     if (countryName) {
@@ -20,10 +29,7 @@ const App = () => {
         setMessage({directive:'candidate' ,data:{candidates, handleShow}})
       }
       else if (candidates.length === 1) {
-        countriesinfoServices.getInfo(candidates[0])
-        .then(info => {
-          setMessage({directive:'info' ,data:info})
-        })
+        getCountryInfo(candidates[0])
       }
       else {
         setMessage(null)
@@ -42,6 +48,7 @@ const App = () => {
 
   const handleShow = (country) => {
     setCountryName(country)
+    getCountryInfo(country)
   }
 
   const handleOnChange =(event) => {

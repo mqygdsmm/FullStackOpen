@@ -25,7 +25,7 @@ const Message = ({message}) => {
             )
         }
         case 'info': {
-            const info = data
+            const {info, weatherData} = data
             return (
             <div>
                 <h1>{info.name.common}</h1>
@@ -36,6 +36,10 @@ const Message = ({message}) => {
                     {Object.values(info.languages).map(value => <li key={value}>{value}</li>)}
                 </ul>
                 <img src={info.flags.png} />
+                <h2>Weather in {info.capital[0]}</h2>
+                <p>temperature: {weatherData.main.temp} Celcius</p>
+                <img src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} />
+                <p>wind {weatherData.wind.speed} m/s</p>
             </div>
             )
         }
