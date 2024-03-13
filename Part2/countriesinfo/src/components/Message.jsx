@@ -12,10 +12,15 @@ const Message = ({message}) => {
             )
         }
         case 'candidate': {
-            const candidates = data
+            console.log(data)
+            const {candidates, handleShow} = data
             return (
             <div>
-                {candidates.map(candidate => <div key={candidate}>{candidate}</div>)}
+                {candidates.map(candidate => 
+                <div key={candidate}>
+                    {candidate}
+                    <button onClick={()=>{handleShow(candidate)}}>show</button>
+                </div>)}
             </div>
             )
         }

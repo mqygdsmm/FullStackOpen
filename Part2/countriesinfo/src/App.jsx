@@ -10,25 +10,17 @@ const App = () => {
 
 
   useEffect(() => {
-    countriesinfoServices.getAll()
-    .then(data => {
-      setCountryList(data)
-    })
-},[])
-  const handleOnChange =(event) => {
-    const value = event.target.value
-    setCountryName(value)
-    if (value) {
-      const candidate = countryList.filter(country => country.toLowerCase().startsWith(value.toLowerCase()))
-      console.log(candidate)
-      if (candidate.length > 10) {
+    if (countryName) {
+      const candidates = countryList.filter(country => country.toLowerCase().startsWith(countryName.toLowerCase()))
+      console.log(candidates)
+      if (candidates.length > 10) {
         setMessage({directive:'tooMany' ,data:'Too many matches, specify another filter'})
       }
-      else if (candidate.length > 1) {
-        setMessage({directive:'candidate' ,data:candidate})
+      else if (candidates.length > 1) {
+        setMessage({directive:'candidate' ,data:{candidates, handleShow}})
       }
-      else if (candidate.length === 1) {
-        countriesinfoServices.getInfo(candidate[0])
+      else if (candidates.length === 1) {
+        countriesinfoServices.getInfo(candidates[0])
         .then(info => {
           setMessage({directive:'info' ,data:info})
         })
@@ -39,8 +31,23 @@ const App = () => {
     }
     else {
       setMessage(null)
+      if (!countryList) {
+        countriesinfoServices.getAll()
+        .then(data => {
+          setCountryList(data)
+        })
+      }
     }  
+},[countryName])
+
+  const handleShow = (country) => {
+    setCountryName(country)
   }
+
+  const handleOnChange =(event) => {
+    setCountryName(event.target.value)
+  }
+
   return (
     <div>
       find countries <input value={countryName} onChange={handleOnChange} />
