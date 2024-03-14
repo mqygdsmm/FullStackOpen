@@ -35,7 +35,7 @@ const App = () => {
           setPersons(persons.filter(person => person.id !== toUpdatePerson.id).concat(data))
         })
         .catch(error => {
-          setMessage(`Information of ${toUpdatePerson.name} has already been removed from server`)
+          setMessage('malFormatted number')
           setPersons(persons.filter(person => person.id !== toUpdatePerson.id))
           setTimeout(() => {
             setMessage(null)
