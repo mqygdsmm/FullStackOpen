@@ -23,11 +23,18 @@ const blogs = [
         url: "www.yeweilun.com",
         likes: 100,
         id: "65f3af4d97887b3565efcacd"
+    },
+    {
+        title: "test3",
+        author: "yeweilun3",
+        url: "www.yeweilun.com",
+        likes: 100,
+        id: "65f3af4d97887b3565efcacd"
     }
 ]
 
 
-describe('listHelper', () => {
+describe('totalLikes', () => {
     test('dummy returns one', () => {
     const result = listHelper.dummy(blogs)
     assert.strictEqual(result, 1)
@@ -35,6 +42,13 @@ describe('listHelper', () => {
 
     test('totalLikes', () => {
     const result = listHelper.totalLikes(blogs)
-    assert.strictEqual(result, 130)
+    assert.strictEqual(result, 230)
+    })
+})
+
+describe('favoriteBlog', () => {
+    test('1', () => {
+        const result = listHelper.favoriteBlog(blogs)
+        assert.deepStrictEqual(result, blogs[2])
     })
 })
