@@ -70,3 +70,14 @@ describe('mostBlogs', () => {
         assert.deepStrictEqual(result, answer)
     })
 })
+
+describe('mostLikes', () => {
+    test('1', () => {
+        const result = listHelper.mostLikes(blogs)
+        const answer = {
+            author: 'yeweilun3',
+            likes: 300
+        }
+        assert.deepStrictEqual(result, answer)
+    })
+})
