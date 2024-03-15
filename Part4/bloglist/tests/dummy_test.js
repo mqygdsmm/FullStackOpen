@@ -30,6 +30,13 @@ const blogs = [
         url: "www.yeweilun.com",
         likes: 100,
         id: "65f3af4d97887b3565efcacd"
+    },
+    {
+        title: "test3",
+        author: "yeweilun3",
+        url: "www.yeweilun.com",
+        likes: 100,
+        id: "65f3af4d97887b3565efcacd"
     }
 ]
 
@@ -42,7 +49,7 @@ describe('totalLikes', () => {
 
     test('totalLikes', () => {
     const result = listHelper.totalLikes(blogs)
-    assert.strictEqual(result, 230)
+    assert.strictEqual(result, 330)
     })
 })
 
@@ -50,5 +57,16 @@ describe('favoriteBlog', () => {
     test('1', () => {
         const result = listHelper.favoriteBlog(blogs)
         assert.deepStrictEqual(result, blogs[2])
+    })
+})
+
+describe('mostBlogs', () => {
+    test('1', () => {
+        const result = listHelper.mostBlogs(blogs)
+        const answer = {
+            author: 'yeweilun3',
+            blogs: 3
+        }
+        assert.deepStrictEqual(result, answer)
     })
 })
