@@ -17,7 +17,7 @@ beforeEach(async () => {
 })
 
 describe.only("backend api test", () => {
-    test.only('blogs are return as json', async () => {
+    test('blogs are return as json', async () => {
         const response = await api
                             .get('/api/blogs')
                             .expect(200)
@@ -25,10 +25,15 @@ describe.only("backend api test", () => {
 
     })
 
-    test.only("there are same blogs as initial blogs", async () => {
+    test("there are same blogs as initial blogs", async () => {
         const response = await api.get('/api/blogs')
         assert.strictEqual(response.body.length, initialBlogs.length)
 
+    })
+
+    test.only('the unique identifier property of the blog posts is named id', async () => {
+        const response = await api.get('/api/blogs')
+        assert.strictEqual(Boolean(response.body[0].id), true)
     })
 })
 describe('helper function test', () => {
