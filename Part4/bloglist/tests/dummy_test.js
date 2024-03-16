@@ -101,6 +101,20 @@ describe('when delete a blog', () => {
         assert.strictEqual(blogsAtEnd.body.length, initialBlogs.length - 1)
     })
 })
+
+describe('when update a blog', () => {
+    test('increase one like', async () => {
+        const blogs = await api.get('/api/blogs')
+        const toUpdateBlog = blogs.body[0]
+
+        const UpdatedBlog = await api
+                        .put(`/api/blogs/${toUpdateBlog.id}`)
+                        .send({likes : toUpdateBlog.likes + 1})
+                        .expect(200)
+        
+        assert.strictEqual(UpdatedBlog.body.likes, toUpdateBlog.likes + 1)
+    })
+})
 describe('helper function test', () => {
     test('dummy returns one', () => {
     const result = listHelper.dummy(initialBlogs)
