@@ -51,7 +51,19 @@ describe.only("backend api test", () => {
         
         const blogs = await api.get('/api/blogs')
         assert.strictEqual(blogs.body.length, initialBlogs.length + 1)
+    })
+
+    test.only('the likes property is missing from the request, it will default to the value 0.', async () => {
+        const newBlog = {
+            title: "test4",
+            author: "yeweilun4",
+            url: "www.yeweilun.com",
+        }
+        const response = await api
+                        .post('/api/blogs')
+                        .send(newBlog)
         
+        assert.strictEqual(response.body.likes, 0)
     })
 })
 describe('helper function test', () => {
