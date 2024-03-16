@@ -36,7 +36,7 @@ describe.only("backend api test", () => {
         assert.strictEqual(Boolean(response.body[0].id), true)
     })
 
-    test.only('create new blog', async () => {
+    test('create new blog', async () => {
         const newBlog = {
             title: "test4",
             author: "yeweilun4",
@@ -53,7 +53,7 @@ describe.only("backend api test", () => {
         assert.strictEqual(blogs.body.length, initialBlogs.length + 1)
     })
 
-    test.only('the likes property is missing from the request, it will default to the value 0.', async () => {
+    test('the likes property is missing from the request', async () => {
         const newBlog = {
             title: "test4",
             author: "yeweilun4",
@@ -64,6 +64,28 @@ describe.only("backend api test", () => {
                         .send(newBlog)
         
         assert.strictEqual(response.body.likes, 0)
+    })
+
+    test.only('the title or url properties are missing from the request data', async () => {
+        const newBlogWithoutTitle = {
+            author: "yeweilun4",
+            url: "www.yeweilun.com",
+            likes: 100,
+        }
+        const newBlogWithoutUrl = {
+            title: "test4",
+            author: "yeweilun4",
+            likes: 100,
+        }
+        await api
+            .post('/api/blogs')
+            .send(newBlogWithoutTitle)
+            .expect(400)
+
+        await api
+            .post('/api/blogs')
+            .send(newBlogWithoutUrl)
+            .expect(400)
     })
 })
 describe('helper function test', () => {
