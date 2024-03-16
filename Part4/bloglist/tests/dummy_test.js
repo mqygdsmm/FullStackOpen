@@ -31,9 +31,27 @@ describe.only("backend api test", () => {
 
     })
 
-    test.only('the unique identifier property of the blog posts is named id', async () => {
+    test('the unique identifier property of the blog posts is named id', async () => {
         const response = await api.get('/api/blogs')
         assert.strictEqual(Boolean(response.body[0].id), true)
+    })
+
+    test.only('create new blog', async () => {
+        const newBlog = {
+            title: "test4",
+            author: "yeweilun4",
+            url: "www.yeweilun.com",
+            likes: 100,
+        }
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-type', /application\/json/)
+        
+        const blogs = await api.get('/api/blogs')
+        assert.strictEqual(blogs.body.length, initialBlogs.length + 1)
+        
     })
 })
 describe('helper function test', () => {
