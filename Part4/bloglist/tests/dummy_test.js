@@ -16,7 +16,7 @@ beforeEach(async () => {
     await Promise.all(promiseArray)
 })
 
-describe.only("backend api test", () => {
+describe("when blogs are initialized", () => {
     test('blogs are return as json', async () => {
         const response = await api
                             .get('/api/blogs')
@@ -36,7 +36,9 @@ describe.only("backend api test", () => {
         assert.strictEqual(Boolean(response.body[0].id), true)
     })
 
-    test('create new blog', async () => {
+})
+describe('when add new blog', () => { 
+    test('successed with valid data', async () => {
         const newBlog = {
             title: "test4",
             author: "yeweilun4",
@@ -53,7 +55,7 @@ describe.only("backend api test", () => {
         assert.strictEqual(blogs.body.length, initialBlogs.length + 1)
     })
 
-    test('the likes property is missing from the request', async () => {
+    test('the likes property is missing from the request then default to 0', async () => {
         const newBlog = {
             title: "test4",
             author: "yeweilun4",
@@ -66,7 +68,7 @@ describe.only("backend api test", () => {
         assert.strictEqual(response.body.likes, 0)
     })
 
-    test.only('the title or url properties are missing from the request data', async () => {
+    test('the title or url properties are missing from the request data will fail', async () => {
         const newBlogWithoutTitle = {
             author: "yeweilun4",
             url: "www.yeweilun.com",
@@ -86,6 +88,17 @@ describe.only("backend api test", () => {
             .post('/api/blogs')
             .send(newBlogWithoutUrl)
             .expect(400)
+    })
+})
+
+describe('when delete a blog', () => {
+    test('success deleted', async () => {
+        const blogs = await api.get('/api/blogs')
+        const toDeleteId = blogs.body[0].id
+        await api
+            .delete(`/api/blogs/${toDeleteId}`)
+        const blogsAtEnd = await api.get('/api/blogs')
+        assert.strictEqual(blogsAtEnd.body.length, initialBlogs.length - 1)
     })
 })
 describe('helper function test', () => {
