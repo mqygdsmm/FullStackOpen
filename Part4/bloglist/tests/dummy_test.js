@@ -4,6 +4,7 @@ const assert = require('node:assert')
 const listHelper = require('../utils/list_helper')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const {initialBlogs} = require('./test_helper')
 const { default: mongoose } = require('mongoose')
 
@@ -11,7 +12,14 @@ const api = supertest(app)
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-    blogsObjects = initialBlogs.map(blog => new Blog(blog))
+    await User.deleteMany({})
+    const user = await api.post('/api/user').send(
+        {
+            username: "yeweilun",
+            name: "mqyg",
+            password: "546976125qq"
+        }) 
+    blogsObjects = initialBlogs.map(blog => new Blog({...blog, user: user.body.id}))
     const promiseArray = blogsObjects.map(blog => blog.save())
     await Promise.all(promiseArray)
 })
@@ -39,6 +47,8 @@ describe("when blogs are initialized", () => {
 })
 describe('when add new blog', () => { 
     test('successed with valid data', async () => {
+        const getToken = await api.post('/api/login').send({username: "yeweilun", password: "546976125qq"})
+        const token = getToken.body.token 
         const newBlog = {
             title: "test4",
             author: "yeweilun4",
@@ -47,6 +57,7 @@ describe('when add new blog', () => {
         }
         await api
             .post('/api/blogs')
+            .set('authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(201)
             .expect('Content-type', /application\/json/)
@@ -55,7 +66,27 @@ describe('when add new blog', () => {
         assert.strictEqual(blogs.body.length, initialBlogs.length + 1)
     })
 
+    test('failed with invalid token', async () => {
+        const newBlog = {
+            title: "test4",
+            author: "yeweilun4",
+            url: "www.yeweilun.com",
+            likes: 100,
+        }
+        const token = ""
+        await api
+            .post('/api/blogs')
+            .set('authorization', `Bearer ${token}`)
+            .send(newBlog)
+            .expect(401)
+        
+        const blogs = await api.get('/api/blogs')
+        assert.strictEqual(blogs.body.length, initialBlogs.length)
+    })
+
     test('the likes property is missing from the request then default to 0', async () => {
+        const getToken = await api.post('/api/login').send({username: "yeweilun", password: "546976125qq"})
+        const token = getToken.body.token 
         const newBlog = {
             title: "test4",
             author: "yeweilun4",
@@ -63,12 +94,15 @@ describe('when add new blog', () => {
         }
         const response = await api
                         .post('/api/blogs')
+                        .set('authorization', `Bearer ${token}`)
                         .send(newBlog)
         
         assert.strictEqual(response.body.likes, 0)
     })
 
     test('the title or url properties are missing from the request data will fail', async () => {
+        const getToken = await api.post('/api/login').send({username: "yeweilun", password: "546976125qq"})
+        const token = getToken.body.token 
         const newBlogWithoutTitle = {
             author: "yeweilun4",
             url: "www.yeweilun.com",
@@ -82,21 +116,25 @@ describe('when add new blog', () => {
         await api
             .post('/api/blogs')
             .send(newBlogWithoutTitle)
+            .set('authorization', `Bearer ${token}`)
             .expect(400)
 
         await api
             .post('/api/blogs')
             .send(newBlogWithoutUrl)
+            .set('authorization', `Bearer ${token}`)
             .expect(400)
     })
 })
 
 describe('when delete a blog', () => {
     test('success deleted', async () => {
+        const getToken = await api.post('/api/login').send({username: "yeweilun", password: "546976125qq"})
+        const token = getToken.body.token 
         const blogs = await api.get('/api/blogs')
         const toDeleteId = blogs.body[0].id
         await api
-            .delete(`/api/blogs/${toDeleteId}`)
+            .delete(`/api/blogs/${toDeleteId}`).set('authorization', `Bearer ${token}`)
         const blogsAtEnd = await api.get('/api/blogs')
         assert.strictEqual(blogsAtEnd.body.length, initialBlogs.length - 1)
     })

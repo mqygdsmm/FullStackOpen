@@ -22,9 +22,6 @@ blogRouter.post('/', middleware.userExtractor, async (request, response) => {
   }
   const blogToSave = new Blog(blog)
   const result = await blogToSave.save()
-  if (!user.blogs) {
-    user.blogs = []
-  }
   user.blogs = user.blogs.concat(result._id)
   await user.save()
   response.status(201).json(result)
