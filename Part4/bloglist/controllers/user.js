@@ -5,6 +5,9 @@ const UserRouter = require('express').Router()
 
 UserRouter.post('/', async (request, response) => {
     const {username, name, password} = request.body
+    if (!password || password.length < 3) {
+        return response.status(400).json({error: 'invalid password'})
+    }
     const user = new User({
         username,
         name,
