@@ -1,0 +1,22 @@
+const { transform } = require('lodash')
+const mongoose = require('mongoose')
+
+const userSchema = mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    name: String,
+    passwordHash: String
+}, {
+    toJSON: {
+    transform: (doc, ret) => {
+        ret.id = ret._id.toString()
+        delete ret._id
+        delete ret.__v
+    }}
+})
+
+
+module.exports = mongoose.model('User', userSchema)
