@@ -12,14 +12,6 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   
-  const showMessage = (message) => {
-    return (
-      <div style={{border: 'solid red', fontSize: 24, color: 'red', padding: 5, margin: 5}}>
-        {message}
-      </div>
-    )
-  }
-
   const addNewBlog = (newBlog) => {
     setBlogs(blogs.concat(newBlog))
   }
@@ -35,7 +27,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('invalid username or password')
+      setErrorMessage({type:'error', content:'invalid username or password'})
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -67,9 +59,8 @@ const App = () => {
         <Login user={user} password={password} handleLogin={handleLogin} 
               onPasswordChange={({target}) => setPassword(target.value)} 
               onUsernameChange={({target}) => setUsername(target.value)}/>
-          {errorMessage !== null && showMessage(errorMessage)}
+        <Message message={errorMessage} />
       </div>
-
     )
   }
   return (
