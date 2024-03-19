@@ -6,7 +6,6 @@ const BlogForm = ({addNewBlog}) => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
-    const [message, setMessage] = useState(null)
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -16,18 +15,13 @@ const BlogForm = ({addNewBlog}) => {
             setTitle('')
             setAuthor('')
             setUrl('')
-            setMessage({type:'success', content: `a new blog ${title} by ${author}`})
-            setTimeout(() => {
-                setMessage(null)
-            }, 5000);
         } catch (exception) {
-            console.log('error')
+            console.log('error', exception)
 
         }
     }
     return (
         <div>
-            <Message message={message} />
             <h2>Create new blog</h2>
             <form onSubmit={handleSubmit}> 
             <div>
