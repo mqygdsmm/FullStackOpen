@@ -7,7 +7,7 @@ const Login = ({username, password, onUsernameChange, onPasswordChange, handleLo
                     username <input type="text" value={username} onChange={onUsernameChange} />
                 </div>
                 <div>
-                    password <input type="text" value={password} onChange={onPasswordChange} />
+                    password <input type="password" value={password} onChange={onPasswordChange} />
                 </div>
                 <button type="submit">Login</button>
             </form>
