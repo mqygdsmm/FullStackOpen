@@ -15,13 +15,21 @@ const App = () => {
   const [message, setMessage] = useState(null)
   const BlogFormRef = useRef() 
 
-  const addNewBlog = (newBlog) => {
-    setBlogs(blogs.concat(newBlog))
-    BlogFormRef.current.toggleVisibility()
-    setMessage({type:'success', content: `a new blog ${newBlog.title} by ${newBlog.author}`})
-    setTimeout(() => {
+  const addNewBlog = async (newBlog) => {
+    try {
+      const blog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(blog))
+      BlogFormRef.current.toggleVisibility()
+      setMessage({type:'success', content: `a new blog ${newBlog.title} by ${newBlog.author}`})
+      setTimeout(() => {
+          setMessage(null)
+      }, 2000);
+    } catch (exception) {
+      setMessage({type:'error', content:'invalid data'})
+      setTimeout(() => {
         setMessage(null)
-    }, 2000);
+      }, 5000)
+    }
     
   }
 

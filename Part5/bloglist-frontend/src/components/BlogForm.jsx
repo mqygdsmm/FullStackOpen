@@ -9,16 +9,10 @@ const BlogForm = ({addNewBlog}) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        try {
-            const newBlog = await blogServices.create({title, author, url})
-            addNewBlog(newBlog)
-            setTitle('')
-            setAuthor('')
-            setUrl('')
-        } catch (exception) {
-            console.log('error', exception)
-
-        }
+        addNewBlog({title, author, url})
+        setTitle('')
+        setAuthor('')
+        setUrl('')
     }
     return (
         <div>
