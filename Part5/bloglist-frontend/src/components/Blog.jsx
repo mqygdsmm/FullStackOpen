@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 const Blog = ({ blog, like, remove, sameUser }) => {
   const style = {
     border: 'solid black',
@@ -8,8 +8,8 @@ const Blog = ({ blog, like, remove, sameUser }) => {
     marginBottom: 5
   }
   const [visible, setVisible] = useState(false)
-  const showWhenVisible = {display: visible ? '' : 'none'}
-  const showWhenSameUser = {display:  sameUser ? '' : 'none'}
+  const showWhenVisible = { display: visible ? '' : 'none' }
+  const showWhenSameUser = { display:  sameUser ? '' : 'none' }
   const toggleVisibility = () => {
     setVisible(!visible)
   }
@@ -26,29 +26,26 @@ const Blog = ({ blog, like, remove, sameUser }) => {
 
   const handleRemove = () => {
     if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
-         remove(blog.id)
+      remove(blog.id)
     }
   }
-  
   return (
-  <div style={style}>
+    <div style={style}>
       {blog.title} {blog.author}
-    <button style={{marginLeft: 10}} onClick={toggleVisibility}>{visible ? 'hide' : 'show'}</button>
-    <div style={showWhenVisible}>
-      <p>{blog.url}</p>
-      <div>
-        Likes: {blog.likes}
-        <button onClick={handleLike} style={{marginLeft: 5}}>Like</button>
-      </div>
-      <p>{blog.user.username}</p>
-      <div style={showWhenSameUser}>
-        <button onClick={handleRemove}>remove</button>
+      <button style={{ marginLeft: 10 }} onClick={toggleVisibility}>{visible ? 'hide' : 'show'}</button>
+      <div style={showWhenVisible}>
+        <p>{blog.url}</p>
+        <div>
+          Likes: {blog.likes}
+          <button onClick={handleLike} style={{ marginLeft: 5 }}>Like</button>
+        </div>
+        <p>{blog.user.username}</p>
+        <div style={showWhenSameUser}>
+          <button onClick={handleRemove}>remove</button>
+        </div>
       </div>
     </div>
-
-  </div>  
   )
-  
 }
 
 export default Blog
