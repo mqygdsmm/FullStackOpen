@@ -43,10 +43,14 @@ blogRouter.delete('/:id', middleware.userExtractor, async (request, response) =>
   }
 })
 
-blogRouter.put('/:id', async (request, response) => {
+blogRouter.put('/:id', middleware.userExtractor, async (request, response) => {
+  const user = request.user
+  if (!user) {
+    return response.status(401).json({eror:"invalid user"})
+  }
   const id = request.params.id
   const update = request.body
-  const result = await Blog.findByIdAndUpdate(id, update, {new: true})
+  const result = await Blog.findByIdAndUpdate(id, update, {new: true}).populate('user')
   response.json(result)
 })
 
