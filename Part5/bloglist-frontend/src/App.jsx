@@ -58,9 +58,24 @@ const App = () => {
   }
 
   const like = async (id, blog) => {
+    try {
      const updatedBlog = await blogService.update(id, {...blog, likes: blog.likes + 1})
      setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
+    } catch (exception) {
+      console.log('error')
+    }
   }
+
+  const remove = async (id) => {
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+    } catch (exception) {
+      console.log('error')
+
+    }
+  }
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -97,7 +112,7 @@ const App = () => {
         <BlogForm addNewBlog={addNewBlog} />
       </Togglable>
       {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} like={like} />
+        <Blog key={blog.id} blog={blog} like={like} remove={remove} sameUser={user.username === blog.user.username}/>
       )}
     </div>
   )

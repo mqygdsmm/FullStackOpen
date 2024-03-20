@@ -1,5 +1,5 @@
 import { useState } from "react"
-const Blog = ({ blog, like }) => {
+const Blog = ({ blog, like, remove, sameUser }) => {
   const style = {
     border: 'solid black',
     borderWidth: 1,
@@ -9,6 +9,7 @@ const Blog = ({ blog, like }) => {
   }
   const [visible, setVisible] = useState(false)
   const showWhenVisible = {display: visible ? '' : 'none'}
+  const showWhenSameUser = {display:  sameUser ? '' : 'none'}
   const toggleVisibility = () => {
     setVisible(!visible)
   }
@@ -22,6 +23,12 @@ const Blog = ({ blog, like }) => {
       user: blog.user.id
     })
   }
+
+  const handleRemove = () => {
+    if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
+         remove(blog.id)
+    }
+  }
   
   return (
   <div style={style}>
@@ -34,6 +41,9 @@ const Blog = ({ blog, like }) => {
         <button onClick={handleLike} style={{marginLeft: 5}}>Like</button>
       </div>
       <p>{blog.user.username}</p>
+      <div style={showWhenSameUser}>
+        <button onClick={handleRemove}>remove</button>
+      </div>
     </div>
 
   </div>  
