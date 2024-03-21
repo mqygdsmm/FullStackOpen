@@ -1,6 +1,8 @@
 import userEvent from '@testing-library/user-event'
 import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
+import BlogForm from './BlogForm'
+import { expect } from 'vitest'
 
 
 describe('<Blog />', () => {
@@ -44,8 +46,24 @@ describe('<Blog />', () => {
     const likeButton = screen.getByText('Like')
     await user.dblClick(likeButton)
     expect(likeHandler.mock.calls).toHaveLength(2)
+  })
+})
 
 
+describe('<BlogForm />', () => {
+  test('create new blog with right details', async () => {
+    const user = userEvent.setup()
+    const addNewBlog = vi.fn()
+    const { container } = render(<BlogForm addNewBlog={ addNewBlog } />)
 
+    await user.type(container.querySelector('#title'), 'test-title')
+    await user.type(container.querySelector('#author'), 'test-author')
+    await user.type(container.querySelector('#url'), 'test-url')
+    expect(container.querySelector('#title')).toHaveValue('test-title')
+    expect(container.querySelector('#author')).toHaveValue('test-author')
+    expect(container.querySelector('#url')).toHaveValue('test-url')
+    await user.click(screen.getByText('Create'))
+
+    expect(addNewBlog.mock.calls).toHaveLength(1)
   })
 })
