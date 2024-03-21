@@ -4,8 +4,9 @@ import Blog from './Blog'
 
 
 describe('<Blog />', () => {
-  let container
+  let container, likeHandler
   beforeEach(() => {
+    likeHandler = vi.fn()
     const blog = {
       title: 'title',
       author: 'author',
@@ -15,7 +16,7 @@ describe('<Blog />', () => {
         username: 'test'
       }
     }
-    container= render(<Blog blog={blog} />).container
+    container= render(<Blog blog={blog} like={likeHandler}/>).container
   })
 
   test('at first, only show the title and author of a blog', () => {
@@ -33,5 +34,18 @@ describe('<Blog />', () => {
 
     const details = container.querySelector('.blogDetails')
     expect(details).not.toHaveStyle('display: none')
+  })
+
+  test('press like button twice, the event handler is called twice', async () => {
+    const user = userEvent.setup()
+    const showButton = screen.getByText('show')
+    await user.click(showButton)
+
+    const likeButton = screen.getByText('Like')
+    await user.dblClick(likeButton)
+    expect(likeHandler.mock.calls).toHaveLength(2)
+
+
+
   })
 })
