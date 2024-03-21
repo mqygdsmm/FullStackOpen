@@ -4,7 +4,8 @@ import Blog from './Blog'
 
 
 describe('<Blog />', () => {
-  test('at first, only show the title and author of a blog', () => {
+  let container
+  beforeEach(() => {
     const blog = {
       title: 'title',
       author: 'author',
@@ -14,14 +15,23 @@ describe('<Blog />', () => {
         username: 'test'
       }
     }
+    container= render(<Blog blog={blog} />).container
+  })
 
-    const { container } = render(<Blog blog={blog} />)
-
+  test('at first, only show the title and author of a blog', () => {
     const element = screen.getByText('title author')
-    screen.debug(element)
     expect(element).not.toHaveStyle('display: none')
     const details = container.querySelector('.blogDetails')
     expect(details).toHaveStyle('display: none')
 
+  })
+
+  test('after press show button, details show', async () => {
+    const user = userEvent.setup()
+    const showButton = screen.getByText('show')
+    await user.click(showButton)
+
+    const details = container.querySelector('.blogDetails')
+    expect(details).not.toHaveStyle('display: none')
   })
 })
