@@ -2,7 +2,7 @@ const Login = ({ username, password, onUsernameChange, onPasswordChange, handleL
   return (
     <div>
       <h1>Log in  to application</h1>
-      <form onSubmit={handleLogin}>
+      <form data-testId='login' onSubmit={handleLogin}>
         <div>
             username <input type="text" value={username} onChange={onUsernameChange} />
         </div>
