@@ -1,5 +1,5 @@
 import { describe, test, beforeEach, expect } from '@playwright/test'
-import { createBlog, createUser } from './helper'
+import { createBlog, loginUser } from './helper'
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -7,6 +7,14 @@ describe('Blog app', () => {
     await request.post('http://localhost:3003/api/user', {
       data: {
         username: 'yeweilun',
+        name: 'mqyg',
+        password: '546976125'
+      }
+    })
+
+    await request.post('http://localhost:3003/api/user', {
+      data: {
+        username: 'yeweilun2',
         name: 'mqyg',
         password: '546976125'
       }
@@ -20,19 +28,19 @@ describe('Blog app', () => {
 
   describe('login', () => {
     test('success login in', async ({ page }) => {
-      await createUser(page, 'yeweilun', '546976125')
+      await loginUser(page, 'yeweilun', '546976125')
       await expect(page.getByText('yeweilun logged in')).toBeVisible()
     })
 
     test('invalid credential will fail', async ({ page }) => {
-      await createUser(page, 'yeweilun', 'wrong')
+      await loginUser(page, 'yeweilun', 'wrong')
       await expect(page.getByText('invalid username or password')).toBeVisible()
     }) 
   })
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await createUser(page, 'yeweilun', '546976125')
+      await loginUser(page, 'yeweilun', '546976125')
     })
 
     test('a new blog can be created', async ({ page }) => {
@@ -53,6 +61,17 @@ describe('Blog app', () => {
       page.on('dialog', async dialog => {await dialog.accept()})
       await page.getByRole('button', {name: 'remove'}).click()
       await expect(page.getByText('test-title test-author')).not.toBeVisible()
+    })
+
+    test('the delete button can only be seen by user who created it', async ({ page }) => {
+      await createBlog(page, 'test-title', 'test-author', 'test-url')
+      await page.getByRole('button', {name: 'show'}).click()
+      await expect(page.getByText('remove')).toBeVisible()
+      await page.getByRole('button', {name: 'logout'}).click()
+      await loginUser(page, 'yeweilun2', '546976125')
+      await page.getByRole('button', {name: 'show'}).click()
+      await expect(page.getByText('remove')).not.toBeVisible()
+
     })
   })
 })

@@ -1,4 +1,4 @@
-const createUser = async (page, username, password) => {
+const loginUser = async (page, username, password) => {
   await page.getByTestId('username').fill(username)
   await page.getByTestId('password').fill(password)
   await page.getByRole('button', {name: 'Login'}).click()
@@ -13,4 +13,4 @@ const createBlog = async (page, title, author, url) => {
   await page.getByText(`a new blog ${title} by ${author}`).waitFor()
 }
 
-module.exports = {createUser, createBlog}
+module.exports = {loginUser, createBlog}
