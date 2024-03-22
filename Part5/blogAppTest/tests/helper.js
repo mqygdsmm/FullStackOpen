@@ -10,7 +10,7 @@ const createBlog = async (page, title, author, url) => {
   await page.getByTestId('author').fill(author)
   await page.getByTestId('url').fill(url)
   await page.getByRole('button', {name: 'Create'}).click()
-  await page.getByText(`${title} ${author}`).waitFor()
+  await page.getByText(`a new blog ${title} by ${author}`).waitFor()
 }
 
 module.exports = {createUser, createBlog}

@@ -12,6 +12,7 @@ blogRouter.get('/', async (request, response) => {
 blogRouter.post('/', middleware.userExtractor, async (request, response) => {
   const {url, title, author, likes} = request.body
   const user = request.user
+  console.log(user)
   if (!user) {
     return response.status(401).json({eror:"invalid user"})
   }
@@ -24,7 +25,7 @@ blogRouter.post('/', middleware.userExtractor, async (request, response) => {
   const result = await blogToSave.save()
   user.blogs = user.blogs.concat(result._id)
   await user.save()
-  response.status(201).json(result)
+  response.status(201).json(await Blog.findById(result._id).populate('user',{username:1, name:1, id:1}))
 })
 
 blogRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
