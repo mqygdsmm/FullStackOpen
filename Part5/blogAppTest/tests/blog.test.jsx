@@ -1,5 +1,5 @@
 import { describe, test, beforeEach, expect } from '@playwright/test'
-
+import { createBlog, createUser } from './helper'
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -20,19 +20,24 @@ describe('Blog app', () => {
 
   describe('login', () => {
     test('success login in', async ({ page }) => {
-      await page.getByTestId('username').fill('yeweilun')
-      await page.getByTestId('password').fill('546976125')
-      await page.getByRole('button', {name: 'Login'}).click()
-
+      await createUser(page, 'yeweilun', '546976125')
       await expect(page.getByText('yeweilun logged in')).toBeVisible()
     })
 
     test('invalid credential will fail', async ({ page }) => {
-      await page.getByTestId('username').fill('yeweilun')
-      await page.getByTestId('password').fill('wrong')
-      await page.getByRole('button', {name: 'Login'}).click()
-
+      await createUser(page, 'yeweilun', 'wrong')
       await expect(page.getByText('invalid username or password')).toBeVisible()
     }) 
+  })
+
+  describe('when logged in', () => {
+    beforeEach(async ({ page }) => {
+      await createUser(page, 'yeweilun', '546976125')
+    })
+
+    test('a new blog can be created', async ({ page }) => {
+      await createBlog(page, 'test-title', 'test-author', 'test-url')
+      await expect(page.getByText('a new blog test-title by test-author')).toBeVisible()
+    })
   })
 })
