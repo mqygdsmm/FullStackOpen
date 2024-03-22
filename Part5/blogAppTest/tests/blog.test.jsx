@@ -1,10 +1,11 @@
 import { describe, test, beforeEach, expect } from '@playwright/test'
-import { createBlog, loginUser } from './helper'
+import { createBlog, loginUser, clickLike } from './helper'
 
 describe('Blog app', () => {
+  let user
   beforeEach(async ({ page, request }) => {
     await request.post('http://localhost:3003/api/testing/reset')
-    await request.post('http://localhost:3003/api/user', {
+    user = await request.post('http://localhost:3003/api/user', {
       data: {
         username: 'yeweilun',
         name: 'mqyg',
@@ -71,7 +72,19 @@ describe('Blog app', () => {
       await loginUser(page, 'yeweilun2', '546976125')
       await page.getByRole('button', {name: 'show'}).click()
       await expect(page.getByText('remove')).not.toBeVisible()
+    })
 
+    test('blogs are sort by likes descendingly', async ({page}) => {
+      await createBlog(page, 'first', 'test-author', 'test-url')
+      await createBlog(page, 'second', 'test-author', 'test-url')
+      await createBlog(page, 'third', 'test-author', 'test-url')
+
+      await clickLike(page, 'first test-author', 1)
+      await clickLike(page, 'second test-author', 3)
+      await clickLike(page, 'third test-author', 5)
+      expect(page.locator('.blogDiv').nth(0)).toContainText('third')
+      expect(page.locator('.blogDiv').nth(1)).toContainText('second')
+      expect(page.locator('.blogDiv').nth(2)).toContainText('first')
     })
   })
 })

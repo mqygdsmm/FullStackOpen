@@ -30,7 +30,7 @@ const Blog = ({ blog, like, remove, sameUser }) => {
     }
   }
   return (
-    <div style={style}>
+    <div style={style} className='blogDiv'>
       {blog.title} {blog.author}
       <button style={{ marginLeft: 10 }} onClick={toggleVisibility}>{visible ? 'hide' : 'show'}</button>
       <div style={showWhenVisible} className='blogDetails'>

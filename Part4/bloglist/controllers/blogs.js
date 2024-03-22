@@ -12,7 +12,6 @@ blogRouter.get('/', async (request, response) => {
 blogRouter.post('/', middleware.userExtractor, async (request, response) => {
   const {url, title, author, likes} = request.body
   const user = request.user
-  console.log(user)
   if (!user) {
     return response.status(401).json({eror:"invalid user"})
   }
