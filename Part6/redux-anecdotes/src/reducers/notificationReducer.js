@@ -3,13 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const notificationSlice = createSlice({
   name: 'notification',
-  initialState: 'there is a notification',
+  initialState: '',
   reducers: {
     renderNotification(state, action) {
       return action.payload
     },
 
-    clearNotification(state, action) {
+    clearNotification() {
       return ''
     }
 
