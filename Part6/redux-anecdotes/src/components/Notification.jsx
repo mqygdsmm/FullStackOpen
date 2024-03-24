@@ -8,6 +8,7 @@ const Notification = () => {
     borderWidth: 1,
     margin: 10
   }
+  style.display = notification === '' ? 'none': ''
   return (
     <div style={style}>
       {notification}
