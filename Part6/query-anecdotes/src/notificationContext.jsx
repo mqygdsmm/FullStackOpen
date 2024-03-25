@@ -24,6 +24,7 @@ export const NotificationContextProvider = (props) => {
   )
 }
 
+
 export const useNotificationValue = () => {
   const notificationAndDispatch = useContext(NotificationContext)
   return notificationAndDispatch[0]
@@ -32,6 +33,18 @@ export const useNotificationValue = () => {
 export const useNotificationDispatch = () => {
   const notificationAndDispatch = useContext(NotificationContext)
   return notificationAndDispatch[1]
+}
+
+export const useRenderNotification = () => {
+  const notificationDispatch = useNotificationDispatch()
+  return (payload) => {
+    notificationDispatch({type: 'setNotification', payload})
+    setTimeout(() => {
+      notificationDispatch({type: 'clearNotification'})
+    }, 5000)
+  }
+
+
 }
 
 NotificationContextProvider.propTypes = {
