@@ -1,12 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBlog, updateBlogData } from "../reducers/blogReducer";
 import { useNavigate } from "react-router-dom";
+import { useField } from "../hooks";
+import { addComment } from "../reducers/blogReducer";
 const Blog = ({ blog }) => {
+  const comment = useField("text");
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user);
-  const sameUser = currentUser
-    ? currentUser.username === blog.user.username
-    : false;
+  const sameUser =
+    currentUser && blog ? currentUser.username === blog.user.username : false;
   const dispatch = useDispatch();
   const showWhenSameUser = { display: sameUser ? "" : "none" };
 
@@ -22,6 +24,16 @@ const Blog = ({ blog }) => {
       navigate("/");
     }
   };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    dispatch(addComment(blog.id, comment.props.value));
+    comment.resetField();
+  };
+
+  if (!currentUser || !blog) {
+    return null;
+  }
 
   return (
     <div>
@@ -43,11 +55,15 @@ const Blog = ({ blog }) => {
           <button onClick={handleRemove}>remove</button>
         </div>
         <h3>comments</h3>
+        <div>
+          <form onSubmit={handleSubmit}>
+            <input {...comment.props} />
+            <button type="submit">add comment</button>
+          </form>
+        </div>
         <ul>
           {blog.comments &&
-            blog.comments.map((comment) => (
-              <li key={comment.id}>{comment.content}</li>
-            ))}
+            blog.comments.map((comment) => <li key={comment}>{comment}</li>)}
         </ul>
       </div>
     </div>
