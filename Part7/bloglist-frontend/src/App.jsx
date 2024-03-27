@@ -24,6 +24,7 @@ const App = () => {
   const users = useSelector((state) => state.users);
   const blogs = useSelector((state) => state.blogs);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const userMatch = useMatch("/users/:id");
   const blogMatch = useMatch("/blogs/:id");
   const user = userMatch
@@ -34,6 +35,18 @@ const App = () => {
     ? blogs.find((blog) => blog.id === blogMatch.params.id)
     : null;
 
+  const padding = {
+    padding: 5,
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+  const navibarStyle = {
+    background: "lightgrey",
+    display: currentUser ? "" : "none",
+  };
   useEffect(() => {
     dispatch(initializeBlogs());
     dispatch(initializeUser());
@@ -42,21 +55,28 @@ const App = () => {
 
   return (
     <div>
+      <div style={navibarStyle}>
+        <Link to="/blogs" style={padding}>
+          blogs
+        </Link>
+        <Link to="/users" style={padding}>
+          users
+        </Link>
+        {currentUser && currentUser.username} logged in{" "}
+        <button onClick={handleLogout}>logout</button>
+      </div>
       <div>
-        <h2>blogs</h2>
-        {currentUser !== null && (
-          <p>
-            {currentUser.username} logged in
-            <button onClick={() => dispatch(logout())}>logout</button>
-          </p>
-        )}
         <Message />
       </div>
       <Routes>
         <Route
           path="/"
           element={
-            currentUser ? <BlogList /> : <Navigate replace to="/login" />
+            currentUser ? (
+              <Navigate replace to="/blogs" />
+            ) : (
+              <Navigate replace to="/login" />
+            )
           }
         />
         <Route
@@ -64,6 +84,7 @@ const App = () => {
           element={currentUser ? <Navigate replace to="/" /> : <Login />}
         />
         <Route path="/users" element={currentUser ? <Users /> : <Login />} />
+        <Route path="/blogs" element={<BlogList />} />
         <Route path="/users/:id" element={<User user={user} />} />
         <Route path="/blogs/:id" element={<Blog blog={blog} />} />
       </Routes>

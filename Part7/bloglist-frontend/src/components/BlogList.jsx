@@ -25,6 +25,7 @@ const BlogList = () => {
   const BlogFormRef = useRef();
   return (
     <div>
+      <h2>blog app</h2>
       <Togglable buttonLabel="create new blog" ref={BlogFormRef}>
         <BlogForm BlogFormRef={BlogFormRef} />
       </Togglable>
