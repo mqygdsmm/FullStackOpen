@@ -1,16 +1,38 @@
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useField } from "../hooks";
+import { createBlog } from "../reducers/blogReducer";
+import { showNotification } from "../reducers/notificationReducer";
 
-const BlogForm = ({ addNewBlog }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+const BlogForm = ({ BlogFormRef }) => {
+  const dispatch = useDispatch();
+  const title = useField("text");
+  const author = useField("text");
+  const url = useField("text");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    addNewBlog({ title, author, url });
-    setTitle("");
-    setAuthor("");
-    setUrl("");
+    try {
+      dispatch(
+        createBlog({
+          title: title.props.value,
+          author: author.props.value,
+          url: url.props.value,
+        })
+      );
+      title.resetField();
+      author.resetField();
+      url.resetField();
+      BlogFormRef.current.toggleVisibility();
+      dispatch(
+        showNotification({
+          type: "success",
+          content: `a new blog ${title.props.value} by ${author.props.value}`,
+        })
+      );
+    } catch (exception) {
+      console.log(exception);
+      dispatch(showNotification({ type: "error", content: "invalid data" }));
+    }
   };
   return (
     <div>
@@ -18,33 +40,15 @@ const BlogForm = ({ addNewBlog }) => {
       <form onSubmit={handleSubmit}>
         <div>
           title:
-          <input
-            type="text"
-            id="title"
-            data-testid="title"
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
+          <input {...title.props} />
         </div>
         <div>
           author:
-          <input
-            type="text"
-            id="author"
-            data-testid="author"
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
+          <input {...author.props} />
         </div>
         <div>
           url:
-          <input
-            type="text"
-            id="url"
-            data-testid="url"
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
+          <input {...url.props} />
         </div>
         <button type="submit">Create</button>
       </form>
