@@ -1,43 +1,46 @@
-import { useState } from 'react'
-const Blog = ({ blog, like, remove, sameUser }) => {
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteBlog, updateBlogData } from "../reducers/blogReducer";
+const Blog = ({ blog, sameUser }) => {
+  const dispatch = useDispatch();
   const style = {
-    border: 'solid black',
+    border: "solid black",
     borderWidth: 1,
     paddingTop: 10,
     paddingLeft: 2,
-    marginBottom: 5
-  }
-  const [visible, setVisible] = useState(false)
-  const showWhenVisible = { display: visible ? '' : 'none' }
-  const showWhenSameUser = { display:  sameUser ? '' : 'none' }
+    marginBottom: 5,
+  };
+  const [visible, setVisible] = useState(false);
+  const showWhenVisible = { display: visible ? "" : "none" };
+  const showWhenSameUser = { display: sameUser ? "" : "none" };
   const toggleVisibility = () => {
-    setVisible(!visible)
-  }
+    setVisible(!visible);
+  };
 
   const handleLike = () => {
-    like(blog.id, {
-      author: blog.author,
-      title: blog.title,
-      likes: blog.likes,
-      url: blog.url,
-      user: blog.user.id
-    })
-  }
+    dispatch(
+      updateBlogData({ ...blog, likes: blog.likes + 1, user: blog.user.id })
+    );
+  };
 
   const handleRemove = () => {
     if (window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
-      remove(blog.id)
+      dispatch(deleteBlog(blog.id));
     }
-  }
+  };
   return (
-    <div style={style} className='blogDiv'>
+    <div style={style} className="blogDiv">
       {blog.title} {blog.author}
-      <button style={{ marginLeft: 10 }} onClick={toggleVisibility}>{visible ? 'hide' : 'show'}</button>
-      <div style={showWhenVisible} className='blogDetails'>
+      <button style={{ marginLeft: 10 }} onClick={toggleVisibility}>
+        {visible ? "hide" : "show"}
+      </button>
+      <div style={showWhenVisible} className="blogDetails">
         <p>{blog.url}</p>
         <div>
           Likes: {blog.likes}
-          <button onClick={handleLike} style={{ marginLeft: 5 }}>Like</button>
+          <button onClick={handleLike} style={{ marginLeft: 5 }}>
+            Like
+          </button>
         </div>
         <p>{blog.user.username}</p>
         <div style={showWhenSameUser}>
@@ -45,7 +48,7 @@ const Blog = ({ blog, like, remove, sameUser }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Blog
+export default Blog;

@@ -20,7 +20,7 @@ const App = () => {
   const blogs = useSelector((state) => state.blogs);
   const dispatch = useDispatch();
 
-  const addNewBlog = async (newBlog) => {
+  const addNewBlog = (newBlog) => {
     try {
       dispatch(createBlog(newBlog));
       BlogFormRef.current.toggleVisibility();
@@ -59,20 +59,6 @@ const App = () => {
     window.localStorage.removeItem("blogAppUser");
     setUser(null);
   };
-
-  // const like = async (id, blog) => {
-  //   try {
-  //     const updatedBlog = await blogService.update(id, {
-  //       ...blog,
-  //       likes: blog.likes + 1,
-  //     });
-  //     setBlogs(
-  //       blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
-  //     );
-  //   } catch (exception) {
-  //     console.log("error");
-  //   }
-  // };
 
   // const remove = async (id) => {
   //   try {
@@ -128,7 +114,7 @@ const App = () => {
             blog={blog}
             // like={like}
             // remove={remove}
-            // sameUser={user.username === blog.user.username}
+            sameUser={user.username === blog.user.username}
           />
         ))}
     </div>
