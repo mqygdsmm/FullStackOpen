@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 const Blog = ({ blog }) => {
   const navigate = useNavigate();
   const currentUser = useSelector((state) => state.user);
-  const sameUser = currentUser.username === blog.user.username;
+  const sameUser = currentUser
+    ? currentUser.username === blog.user.username
+    : false;
   const dispatch = useDispatch();
   const showWhenSameUser = { display: sameUser ? "" : "none" };
 
@@ -40,6 +42,13 @@ const Blog = ({ blog }) => {
         <div style={showWhenSameUser}>
           <button onClick={handleRemove}>remove</button>
         </div>
+        <h3>comments</h3>
+        <ul>
+          {blog.comments &&
+            blog.comments.map((comment) => (
+              <li key={comment.id}>{comment.content}</li>
+            ))}
+        </ul>
       </div>
     </div>
   );
