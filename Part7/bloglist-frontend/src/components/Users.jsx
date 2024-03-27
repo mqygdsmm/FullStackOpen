@@ -1,29 +1,36 @@
-import { countBy, keys } from "lodash";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Users = () => {
-  const blogs = useSelector((state) => state.blogs);
-  const data = countBy(blogs, "user.username");
-  const users = keys(data);
+  const users = useSelector((state) => state.users);
+
   return (
     <div>
       <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <td></td>
-            <td>
-              <em>Blogs created</em>
-            </td>
-          </tr>
-        </thead>
-        {users.map((user) => (
-          <tr>
-            <td>{user}</td>
-            <td>{data[user]}</td>
-          </tr>
-        ))}
-      </table>
+      {users && (
+        <table>
+          <thead>
+            <tr>
+              <td></td>
+              <td>
+                <em>Blogs created</em>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => {
+              return (
+                <tr key={user.id}>
+                  <td>
+                    <Link to={`/users/${user.id}`}>{user.username}</Link>
+                  </td>
+                  <td>{user.blogs.length}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

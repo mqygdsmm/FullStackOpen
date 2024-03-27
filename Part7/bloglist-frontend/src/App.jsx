@@ -3,28 +3,43 @@ import Login from "./components/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogReducer";
 import { initializeUser } from "./reducers/userReducer";
+import { initializeUsers } from "./reducers/usersReducer";
 import BlogList from "./components/BlogList";
-import { Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Link,
+  Navigate,
+  useNavigate,
+  useMatch,
+} from "react-router-dom";
 import { logout } from "./reducers/userReducer";
 import Message from "./components/Message";
 import Users from "./components/Users";
+import User from "./components/User";
 
 const App = () => {
-  const user = useSelector((state) => state.user);
+  const currentUser = useSelector((state) => state.user);
+  const users = useSelector((state) => state.users);
   const dispatch = useDispatch();
+  const userMatch = useMatch("/users/:id");
+  const user = userMatch
+    ? users.find((user) => user.id === userMatch.params.id)
+    : null;
 
   useEffect(() => {
     dispatch(initializeBlogs());
     dispatch(initializeUser());
+    dispatch(initializeUsers());
   }, []);
 
   return (
     <div>
       <div>
         <h2>blogs</h2>
-        {user !== null && (
+        {currentUser !== null && (
           <p>
-            {user.username} logged in
+            {currentUser.username} logged in
             <button onClick={() => dispatch(logout())}>logout</button>
           </p>
         )}
@@ -33,25 +48,19 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={user ? <BlogList /> : <Navigate replace to="/login" />}
+          element={
+            currentUser ? <BlogList /> : <Navigate replace to="/login" />
+          }
         />
         <Route
           path="/login"
-          element={user ? <Navigate replace to="/" /> : <Login />}
+          element={currentUser ? <Navigate replace to="/" /> : <Login />}
         />
-        <Route path="/users" element={user ? <Users /> : <Login />} />
+        <Route path="/users" element={currentUser ? <Users /> : <Login />} />
+        <Route path="/users/:id" element={<User user={user} />} />
       </Routes>
     </div>
   );
-  // if (!user) {
-  //   return (
-  //     <div>
-  //       <Login />
-  //       <Message />
-  //     </div>
-  //   );
-  // }
-  // return <BlogList />;
 };
 
 export default App;

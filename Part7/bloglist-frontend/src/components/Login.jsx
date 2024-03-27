@@ -1,7 +1,6 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useField } from "../hooks";
 import { loginWith } from "../reducers/userReducer";
-import { showNotification } from "../reducers/notificationReducer";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
