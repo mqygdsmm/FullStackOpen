@@ -8,31 +8,30 @@ import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import { useDispatch, useSelector } from "react-redux";
 import { showNotification } from "./reducers/notificationReducer";
+import { createBlog, initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  // const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const BlogFormRef = useRef();
   const notification = useSelector((state) => state.notification);
-  const notificationDispatch = useDispatch();
+  const blogs = useSelector((state) => state.blogs);
+  const dispatch = useDispatch();
 
   const addNewBlog = async (newBlog) => {
     try {
-      const blog = await blogService.create(newBlog);
-      setBlogs(blogs.concat(blog));
+      dispatch(createBlog(newBlog));
       BlogFormRef.current.toggleVisibility();
-      notificationDispatch(
+      dispatch(
         showNotification({
           type: "success",
           content: `a new blog ${newBlog.title} by ${newBlog.author}`,
         })
       );
     } catch (exception) {
-      notificationDispatch(
-        showNotification({ type: "error", content: "invalid data" })
-      );
+      dispatch(showNotification({ type: "error", content: "invalid data" }));
     }
   };
 
@@ -47,7 +46,7 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      notificationDispatch(
+      dispatch(
         showNotification({
           type: "error",
           content: "invalid username or password",
@@ -61,31 +60,31 @@ const App = () => {
     setUser(null);
   };
 
-  const like = async (id, blog) => {
-    try {
-      const updatedBlog = await blogService.update(id, {
-        ...blog,
-        likes: blog.likes + 1,
-      });
-      setBlogs(
-        blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
-      );
-    } catch (exception) {
-      console.log("error");
-    }
-  };
+  // const like = async (id, blog) => {
+  //   try {
+  //     const updatedBlog = await blogService.update(id, {
+  //       ...blog,
+  //       likes: blog.likes + 1,
+  //     });
+  //     setBlogs(
+  //       blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+  //     );
+  //   } catch (exception) {
+  //     console.log("error");
+  //   }
+  // };
 
-  const remove = async (id) => {
-    try {
-      await blogService.remove(id);
-      setBlogs(blogs.filter((blog) => blog.id !== id));
-    } catch (exception) {
-      console.log("error");
-    }
-  };
+  // const remove = async (id) => {
+  //   try {
+  //     await blogService.remove(id);
+  //     setBlogs(blogs.filter((blog) => blog.id !== id));
+  //   } catch (exception) {
+  //     console.log("error");
+  //   }
+  // };
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    dispatch(initializeBlogs());
   }, []);
 
   useEffect(() => {
@@ -121,15 +120,15 @@ const App = () => {
       <Togglable buttonLabel="create new blog" ref={BlogFormRef}>
         <BlogForm addNewBlog={addNewBlog} />
       </Togglable>
-      {blogs
+      {[...blogs]
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
           <Blog
             key={blog.id}
             blog={blog}
-            like={like}
-            remove={remove}
-            sameUser={user.username === blog.user.username}
+            // like={like}
+            // remove={remove}
+            // sameUser={user.username === blog.user.username}
           />
         ))}
     </div>
