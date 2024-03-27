@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import loginServices from "../services/login";
 import blogServices from "../services/blogs";
+import { showNotification } from "./notificationReducer";
 const userSlice = createSlice({
   name: "user",
   initialState: null,
@@ -17,10 +18,19 @@ const userSlice = createSlice({
 
 export const loginWith = (username, password) => {
   return async (dispatch) => {
-    const user = await loginServices.login({ username, password });
-    dispatch(setUser(user));
-    window.localStorage.setItem("blogAppUser", JSON.stringify(user));
-    blogServices.setToken(user.token);
+    try {
+      const user = await loginServices.login({ username, password });
+      dispatch(setUser(user));
+      window.localStorage.setItem("blogAppUser", JSON.stringify(user));
+      blogServices.setToken(user.token);
+    } catch (exception) {
+      dispatch(
+        showNotification({
+          type: "error",
+          content: "invalid username or password",
+        })
+      );
+    }
   };
 };
 
