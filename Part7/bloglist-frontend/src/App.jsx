@@ -5,6 +5,7 @@ import { initializeBlogs } from "./reducers/blogReducer";
 import { initializeUser } from "./reducers/userReducer";
 import { initializeUsers } from "./reducers/usersReducer";
 import BlogList from "./components/BlogList";
+import Blog from "./components/Blog";
 import {
   Routes,
   Route,
@@ -21,10 +22,16 @@ import User from "./components/User";
 const App = () => {
   const currentUser = useSelector((state) => state.user);
   const users = useSelector((state) => state.users);
+  const blogs = useSelector((state) => state.blogs);
   const dispatch = useDispatch();
   const userMatch = useMatch("/users/:id");
+  const blogMatch = useMatch("/blogs/:id");
   const user = userMatch
     ? users.find((user) => user.id === userMatch.params.id)
+    : null;
+
+  const blog = blogMatch
+    ? blogs.find((blog) => blog.id === blogMatch.params.id)
     : null;
 
   useEffect(() => {
@@ -58,6 +65,7 @@ const App = () => {
         />
         <Route path="/users" element={currentUser ? <Users /> : <Login />} />
         <Route path="/users/:id" element={<User user={user} />} />
+        <Route path="/blogs/:id" element={<Blog blog={blog} />} />
       </Routes>
     </div>
   );
