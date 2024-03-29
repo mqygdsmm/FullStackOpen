@@ -18,6 +18,7 @@ import { logout } from "./reducers/userReducer";
 import Message from "./components/Message";
 import Users from "./components/Users";
 import User from "./components/User";
+import Registor from "./components/Register";
 
 const App = () => {
   const currentUser = useSelector((state) => state.user);
@@ -54,40 +55,60 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <div style={navibarStyle}>
-        <Link to="/blogs" style={padding}>
-          blogs
-        </Link>
-        <Link to="/users" style={padding}>
-          users
-        </Link>
-        {currentUser && currentUser.username} logged in{" "}
-        <button onClick={handleLogout}>logout</button>
+    <div className="font-serif text-2xl selection:bg-blue-400 selection:text-blue-600">
+      <div
+        className="grid grid-cols-2 space-x-2 p-1 mb-3 text-slate-*00 py-2 bg-gray-200"
+        style={{ display: currentUser ? "" : "none" }}
+      >
+        <div className="space-x-5 px-4 my-1">
+          <Link to="/blogs" className="hover:bg-slate-50 p-2 rounded-md">
+            <span>blogs</span>
+          </Link>
+          <Link to="/users" className="hover:bg-slate-50 p-2 rounded-md">
+            users
+          </Link>
+        </div>
+
+        <div className="text-right pr-3 space-x-3">
+          <span className="italic">
+            {currentUser && (
+              <Link to={`/users/${currentUser.id}`}>{currentUser.name}</Link>
+            )}
+          </span>
+          <button
+            onClick={handleLogout}
+            className="border-1 rounded-lg text-blue-700 bg-blue-300 px-2"
+          >
+            logout
+          </button>
+        </div>
       </div>
-      <div>
-        <Message />
+      <div className="flex flex-col items-center p-8">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              currentUser ? (
+                <Navigate replace to="/blogs" />
+              ) : (
+                <Navigate replace to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/login"
+            element={currentUser ? <Navigate replace to="/" /> : <Login />}
+          />
+          <Route path="/users" element={currentUser ? <Users /> : <Login />} />
+          <Route path="/blogs" element={<BlogList />} />
+          <Route path="/users/:id" element={<User user={user} />} />
+          <Route path="/blogs/:id" element={<Blog blog={blog} />} />
+          <Route
+            path="/register"
+            element={currentUser ? <Navigate replace to="/" /> : <Registor />}
+          />
+        </Routes>
       </div>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            currentUser ? (
-              <Navigate replace to="/blogs" />
-            ) : (
-              <Navigate replace to="/login" />
-            )
-          }
-        />
-        <Route
-          path="/login"
-          element={currentUser ? <Navigate replace to="/" /> : <Login />}
-        />
-        <Route path="/users" element={currentUser ? <Users /> : <Login />} />
-        <Route path="/blogs" element={<BlogList />} />
-        <Route path="/users/:id" element={<User user={user} />} />
-        <Route path="/blogs/:id" element={<Blog blog={blog} />} />
-      </Routes>
     </div>
   );
 };

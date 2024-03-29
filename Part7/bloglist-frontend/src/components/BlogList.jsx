@@ -3,19 +3,16 @@ import BlogForm from "./BlogForm";
 import Togglable from "./Togglable";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
+import Message from "./Message";
 
 const Blog = ({ blog }) => {
-  const style = {
-    border: "solid black",
-    borderWidth: 1,
-    paddingTop: 10,
-    paddingLeft: 2,
-    marginBottom: 5,
-  };
   return (
-    <div style={style} className="blogDiv">
+    <div className="p-2">
       <Link to={`/blogs/${blog.id}`}>
-        {blog.title} {blog.author}
+        <div>{blog.title}</div>
+        <div className="text-sm">
+          {blog.author} likes: {blog.likes} comments: {blog.comments.length}
+        </div>
       </Link>
     </div>
   );
@@ -25,15 +22,18 @@ const BlogList = () => {
   const BlogFormRef = useRef();
   return (
     <div>
-      <h2>blog app</h2>
+      <h2 className="font-bold p-10 text-5xl text-sky-400 italic">blog app</h2>
       <Togglable buttonLabel="create new blog" ref={BlogFormRef}>
         <BlogForm BlogFormRef={BlogFormRef} />
       </Togglable>
-      {[...blogs]
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
+      <Message />
+      <div className="mt-10">
+        {[...blogs]
+          .sort((a, b) => b.likes - a.likes)
+          .map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+      </div>
     </div>
   );
 };

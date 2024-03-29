@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import blogServices from "../services/blogs";
+import { initializeUsers } from "./usersReducer";
 
 const blogSlice = createSlice({
   name: "blogs",
@@ -36,6 +37,7 @@ export const createBlog = (newObject) => {
   return async (dispatch) => {
     const blog = await blogServices.create(newObject);
     dispatch(appendBlog(blog));
+    dispatch(initializeUsers());
   };
 };
 

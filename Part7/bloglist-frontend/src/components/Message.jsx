@@ -6,19 +6,12 @@ const Message = () => {
     return null;
   }
   const { type, content } = message;
-  const style = {
-    fontSize: 24,
-    border: "solid red",
-    background: "lightgray",
-    padding: 5,
-    margin: 5,
-    color: "red",
-  };
+  const errorClassName = "text-red-500 text-lg italic mt-5";
+  const successClassName = "text-lime-500 text-lg italic mt-5";
   if (type === "success") {
-    style.border = "solid green";
-    style.color = "green";
+    return <div className={successClassName}>{content}</div>;
   }
-  return <div style={style}>{content}</div>;
+  return <div className={errorClassName}>{content}</div>;
 };
 
 export default Message;
