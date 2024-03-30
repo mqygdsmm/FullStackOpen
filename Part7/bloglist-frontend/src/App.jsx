@@ -55,9 +55,9 @@ const App = () => {
   }, []);
 
   return (
-    <div className="font-serif text-2xl selection:bg-blue-400 selection:text-blue-600">
+    <div className="font-serif text-lg sm:text-2xl selection:bg-blue-400 selection:text-blue-600">
       <div
-        className="grid grid-cols-2 space-x-2 p-1 mb-3 text-slate-*00 py-2 bg-gray-200"
+        className="grid grid-cols-2 space-x-2 p-1 sm:mb-3 text-slate-*00 py-2 bg-gray-200"
         style={{ display: currentUser ? "" : "none" }}
       >
         <div className="space-x-5 px-4 my-1">
@@ -83,7 +83,7 @@ const App = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col items-center p-8">
+      <div className="flex flex-col items-center px-8 sm:p-8">
         <Routes>
           <Route
             path="/"

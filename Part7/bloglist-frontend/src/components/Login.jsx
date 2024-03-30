@@ -17,21 +17,25 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center text-4xl">
+    <div className="flex flex-col justify-center items-center text-4xl w-screen">
       <h1 className="font-semibold mb-16 text-5xl">
-        Log in to{" "}
+        Log in{" "}
         <span className="relative">
           <span className="block absolute -inset-1 -skew-y-3 bg-blue-300"></span>
           <span className="relative  text-white">blog</span>
         </span>
-        <span> app</span>
+        {/* <span> app</span> */}
       </h1>
-      <form data-testid="login" onSubmit={handleLogin} className="mt-24">
-        <div className="relative mb-16">
+      <form
+        data-testid="login"
+        onSubmit={handleLogin}
+        className="mt-24 flex flex-col  items-center self-center"
+      >
+        <div className="relative mb-16 w-2/3">
           <input
             id="username"
             {...username.props}
-            className="peer h-10 border-b-2 border-grey-300 text-grey-900 focus:outline-none focus:border-sky-500 placeholder-transparent"
+            className="peer w-full h-10 border-b-2 border-grey-300 text-grey-900 focus:outline-none focus:border-sky-500 placeholder-transparent"
             required
             placeholder="username"
           />
@@ -42,11 +46,11 @@ const Login = () => {
             username
           </label>
         </div>
-        <div className="relative">
+        <div className="relative w-2/3">
           <input
             id="password"
             {...password.props}
-            className="peer h-10 border-b-2 border-grey-300 text-grey-900 focus:outline-none focus:border-sky-500 placeholder-transparent"
+            className="peer w-full h-10 border-b-2 border-grey-300 text-grey-900 focus:outline-none focus:border-sky-500 placeholder-transparent"
             placeholder="password"
             required
           />
@@ -60,7 +64,7 @@ const Login = () => {
         <Message />
         <button
           type="submit"
-          className="peer mt-12 ml-16 p-2 bg-blue-400 rounded-md w-64 text-white font-medium focus:outline-none hover:bg-blue-500 active:bg-blue-600 shadow-md shadow-blue-400/50"
+          className="peer mt-12  p-2 bg-blue-400 rounded-md w-64 text-white font-medium focus:outline-none hover:bg-blue-500 active:bg-blue-600 shadow-md shadow-blue-400/50"
         >
           Login
         </button>

@@ -22,12 +22,14 @@ const BlogList = () => {
   const BlogFormRef = useRef();
   return (
     <div>
-      <h2 className="font-bold p-10 text-5xl text-sky-400 italic">blog app</h2>
+      <h2 className="font-bold p-2 sm:p-10 text-2xl sm:text-5xl text-sky-400 italic">
+        blog app
+      </h2>
       <Togglable buttonLabel="create new blog" ref={BlogFormRef}>
         <BlogForm BlogFormRef={BlogFormRef} />
       </Togglable>
       <Message />
-      <div className="mt-10">
+      <div className="mt-5 sm:mt-10">
         {[...blogs]
           .sort((a, b) => b.likes - a.likes)
           .map((blog) => (

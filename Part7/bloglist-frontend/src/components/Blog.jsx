@@ -37,9 +37,11 @@ const Blog = ({ blog }) => {
   }
 
   return (
-    <div className="mt-20">
-      <h2 className="font-bold italic text-4xl mb-3">{blog.title}</h2>
-      <div className="text-xl">{blog.author}</div>
+    <div className="mt-15">
+      <h2 className="font-bold italic text-xl  sm:text-4xl mb-3">
+        {blog.title}
+      </h2>
+      <div className="text-lg sm:text-xl">{blog.author}</div>
       <div className="mt-20">
         <p>
           see more{" "}
